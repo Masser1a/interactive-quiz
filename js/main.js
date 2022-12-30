@@ -76,6 +76,29 @@ function gatherCardData(number) {
         }
     })
 
+    // 2. Находим все заполненные значения из чекбоксов 
+    let checkBoxValues = currentCard.querySelectorAll('[type="checkbox"]')
+    checkBoxValues.forEach(function(item){
+        if (item.checked) {
+            result.push({
+                name: item.name,
+                value: item.value
+            })
+        }
+    })
+
+    // 3. Находим все заполненные значения из инпутов
+    const inputValues = currentCard.querySelectorAll('[type="text"], [type="email"], [type="number"]');
+    inputValues.forEach(function(item) {
+        itemValue = item.value
+        if ( itemValue.trim() != "") {
+            result.push({
+                name: item.name,
+                value: item.value
+            })
+        }
+    })
+
     console.log(result)
 
     const data = {

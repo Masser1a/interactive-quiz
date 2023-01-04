@@ -11,19 +11,27 @@ const btnNext = document.querySelectorAll('[data-nav="next"]');
 btnNext.forEach(function(button){
     button.addEventListener("click", function(){
         const thisCard = this.closest("[data-card]");
-
+        const thisCardNumber = parseInt(thisCard.dataset.card)
 
 
         if(thisCard.dataset.validate == "novalidate") {
             navigate("next", thisCard)
         } else {
-            navigate("next", thisCard)
+
+            // При движении вперёд и если нужно валидация - сохраняем данные в объект 
+            saveAnswer(thisCardNumber, gatherCardData(thisCardNumber));
+
+            // Валидация на заполненность
+            if (isFilled(thisCardNumber)) {
+                navigate("next", thisCard);
+            } else {
+                alert("Сделайте ответ, прежде чем проходить далее.")
+            }
+
         }
 
-        navigate("next", thisCard);
-
-    })
-})
+    });
+});
 
 // Движение назад
 const btnPrev = document.querySelectorAll('[data-nav="prev"]');
@@ -54,6 +62,14 @@ function navigate(derection, thisCard) {
 
 // Функция сбора заполненных данных  с карточки 
 function gatherCardData(number) {
+    /*
+        question: "Ваши любимые блюда",
+        answer:
+                [
+                    {name: "pirogi", value: "Пироги"},
+                    {name: "salati", value: "Салаты"},
+                ]
+    */
 
     let question;
     const result = []
@@ -107,4 +123,18 @@ function gatherCardData(number) {
     }
 
     return data
+}
+
+// Ф-я записи ответа в объект с ответами 
+function saveAnswer(number, data) {
+    answers[number] = data
+}
+
+// Ф-я проверки н азаполнитель 
+function isFilled(number) {
+    if (answers[number].answer.length > 0) {
+        return true;
+    } else {
+        return false;
+    }
 }

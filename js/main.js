@@ -22,7 +22,7 @@ btnNext.forEach(function(button){
             saveAnswer(thisCardNumber, gatherCardData(thisCardNumber));
 
             // Валидация на заполненность
-            if (isFilled(thisCardNumber)) {
+            if (isFilled(thisCardNumber) && checkOnRequired(thisCardNumber)) {
                 navigate("next", thisCard);
             } else {
                 alert("Сделайте ответ, прежде чем проходить далее.")
@@ -136,5 +136,37 @@ function isFilled(number) {
         return true;
     } else {
         return false;
+    }
+}
+
+// Ф-я для проверки email 
+function validateEmail(email) {
+    let pattern = /^[\w-\.]+@[\w-]+\.[a-z]{2,4}$/i;
+    return pattern.test(email);
+}
+
+// Проверка на заполненость required чекбоксов и инпутов с email 
+function checkOnRequired(number) {
+    const currentCard = document.querySelector(`[data-card="${number}"]`);
+    const requiredFields = currentCard.querySelectorAll("[required]");
+
+    const isValidArray = [];
+
+    requiredFields.forEach(function(item){
+        if (item.type == "checkbox" && item.checked == false) {
+            isValidArray.push(false);
+        } else if (item.type == "email") {
+            if ( validateEmail(item.value)) {
+                isValidArray.push(true);
+            } else {
+                isValidArray.push(false);
+            }
+        }
+    });
+
+    if (isValidArray.indexOf(false) == -1) {
+        return true;
+    } else {
+        return false
     }
 }

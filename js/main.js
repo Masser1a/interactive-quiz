@@ -170,3 +170,19 @@ function checkOnRequired(number) {
         return false
     }
 }
+
+// Подсвечиваем рамку у радиокнопок
+document.querySelectorAll(".radio-group").forEach(function(item) {
+    item.addEventListener("click", function(e){
+        // Проверяем где произошёл клик - внутри тега label или нет
+        const label = e.target.closest("label");
+        if (label) {
+            // Отменяем актиный класс у всех тегов label
+            label.closest(".radio-group").querySelectorAll("label").forEach(function(item) {
+                item.classList.remove("radio-block--active");
+            })
+            // Добавляем активный класс к label по которому был клил
+            label.classList.add("radio-block--active");
+        }
+    })
+})

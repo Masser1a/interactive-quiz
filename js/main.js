@@ -16,6 +16,7 @@ btnNext.forEach(function(button){
 
         if(thisCard.dataset.validate == "novalidate") {
             navigate("next", thisCard)
+            updateProgressBar("next", thisCardNumber);
         } else {
 
             // При движении вперёд и если нужно валидация - сохраняем данные в объект 
@@ -24,6 +25,7 @@ btnNext.forEach(function(button){
             // Валидация на заполненность
             if (isFilled(thisCardNumber) && checkOnRequired(thisCardNumber)) {
                 navigate("next", thisCard);
+                updateProgressBar("next", thisCardNumber);
             } else {
                 alert("Сделайте ответ, прежде чем проходить далее.")
             }
@@ -36,10 +38,12 @@ btnNext.forEach(function(button){
 // Движение назад
 const btnPrev = document.querySelectorAll('[data-nav="prev"]');
 btnPrev.forEach(function(button){
-    button.addEventListener("click", function(){
+    button.addEventListener("click", function(){       
         const thisCard = this.closest("[data-card]");
-        navigate("prev", thisCard);
+        const thisCardNumber = parseInt(thisCard.dataset.card)
 
+        navigate("prev", thisCard);
+        updateProgressBar("prev", thisCardNumber);
     })
 })
 
@@ -200,3 +204,34 @@ document.querySelectorAll('label.checkbox-block input[type="checkbox"]').forEach
         }
     })
 })
+
+// Отображение прогресс бара
+function updateProgressBar(direction, cardNumber){
+
+    // Расчёт всего кол-ва карточек // 10
+    let cardsTotalNumber = document.querySelectorAll("[data-card]").length;
+
+
+    // Текущая карточка
+    // Проверка направления перемещения 
+    if (direction == "next") {
+        cardNumber = cardNumber + 1;
+    } else if (direction == "prev") {
+        cardNumber = cardNumber - 1;
+    }
+
+    // Расчёт % прохождения
+    let progress = (cardNumber * 100) / cardsTotalNumber;
+    progress = progress.toFixed()
+    
+    // Находим и обновляем прогресс бар
+    let progressBar = document.querySelector(`[data-card="${cardNumber}"]`).querySelector(".progress");
+    if (progressBar) {
+        // обновить число прогресс бара
+        progressBar.querySelector(".progress__label strong").innerText = `${progress}%`;
+        // обновить полоску прогресс бара
+        progressBar.querySelector(".progress__line-bar").style = `width: ${progress}%`;
+    }
+
+}
+

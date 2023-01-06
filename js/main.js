@@ -186,3 +186,17 @@ document.querySelectorAll(".radio-group").forEach(function(item) {
         }
     })
 })
+
+// Подсвечиваем рамку у чекбоксов
+document.querySelectorAll('label.checkbox-block input[type="checkbox"]').forEach(function(item){
+    item.addEventListener('change', function(){
+        // Если чекбокс проставлен то 
+        if (item.checked) {
+            // добавляем активный класс к тегу label в котором он лежит 
+            item.closest("label").classList.add("checkbox-block--active")
+        } else {
+            // в ином случае убираем активный класс
+            item.closest("label").classList.remove("checkbox-block--active")
+        }
+    })
+})
